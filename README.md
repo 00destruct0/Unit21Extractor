@@ -16,15 +16,9 @@ This project is independently developed and is not affiliated with or endorsed b
 
 ## Installation
 
-1. Extract `Unit21Extractor.zip`.
-2. Copy the extracted `Unit21Extractor` folder to the appropriate module directory shown below.
-
-## Installation
-
 > **Which PowerShell version am I using?**
 >
-> Most Windows systems include **Windows PowerShell 5.1** by default, as it ships preinstalled with the operating system.  
-> If you have not intentionally installed PowerShell 7, you are almost certainly running **PowerShell 5.1**.
+> Most Windows systems include **Windows PowerShell 5.1** by default, as it ships preinstalled with the operating system. If you have not intentionally installed PowerShell 7, you are almost certainly running **PowerShell 5.1**.
 
 
 1. Extract `Unit21Extractor.zip`.
@@ -52,9 +46,6 @@ Import-Module Unit21Extractor
 | Export-U21Sar  | Initiates a bulk export of SARs (Suspicious Activity Reports) from Unit21 for a specified date range, automatically polls until the export completes, and downloads the resulting ZIP. | `Export-U21Sar -ApiKey "your-key" -StartDate "2026-02-12" -OutputPath "C:\Exports\sars.zip"` |
 
 ## Detailed Documentation
-
-See the `docs` folder for detailed documentation on each cmdlet and utility:
-
 - [Export-U21Alert](docs/Export-U21Alert.md)
 - [Export-U21Case](docs/Export-U21Case.md)
 - [Export-U21Sar](docs/Export-U21Sar.md)
@@ -64,8 +55,7 @@ See the `docs` folder for detailed documentation on each cmdlet and utility:
 
 ## Environment Discovery
 
-Use the included `Test-U21Connection.ps1` script to determine which Unit21
-environment your API key belongs to:
+Use the included `Test-U21Connection.ps1` script to determine which Unit21 environment your API key belongs to:
 
 ```powershell
 .\Test-U21Connection.ps1 -ApiKey "your-key"
@@ -73,8 +63,7 @@ environment your API key belongs to:
 
 This tests all six Unit21 environments and shows which one accepts your key.
 
-The module defaults to **Production 2** (`https://api.prod2.unit21.com/v1`).
-To use a different environment, pass the `-BaseUri` parameter:
+The module defaults to Production 2 (`https://api.prod2.unit21.com/v1`) if `-BaseUri` is not specified. To use a different environment, pass the `-BaseUri` parameter:
 
 ```powershell
 Export-U21Sar -ApiKey "your-key" -StartDate "2026-02-01" `
