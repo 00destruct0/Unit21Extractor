@@ -16,12 +16,12 @@ This project is independently developed and is not affiliated with or endorsed b
 
 ## Installation
 
-> **Which PowerShell version am I using?**
+> 📝 **Which PowerShell version am I using?**
 >
 > Most Windows systems include **Windows PowerShell 5.1** by default, as it ships preinstalled with the operating system. If you have not intentionally installed PowerShell 7, you are almost certainly running **PowerShell 5.1**.
 
 
-1. Extract `Unit21Extractor.zip`.
+1. Extract `Unit21Extractor_1_1_0.zip`.
 2. Copy the extracted `Unit21Extractor` folder to the appropriate module directory shown below.
 
 | Version         | Scope         | Path                                            |
@@ -35,6 +35,10 @@ After copying the module, import it:
 Import-Module Unit21Extractor
 ```
 
+## What’s New in v1.1.0
+
+- **Export-U21Alert: Export Enhancements**  
+  `Export-U21Alert` now generates a **detailed report** (`is_summary=false`) by default, based on user feedback indicating this is the preferred format. A new `-Summary` switch has been added to generate a summary report when needed.
 
 
 ## Usage
