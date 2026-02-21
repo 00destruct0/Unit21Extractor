@@ -1,7 +1,7 @@
 @{
     # Module Information
     RootModule        = 'Unit21Extractor.psm1'
-    ModuleVersion     = '1.0.0'
+    ModuleVersion     = '1.1.0'
     GUID              = '7f3c2e91-5b6a-4d8f-9c2a-3e7b1f6a8d42'
     Author            = 'Ryan Terp'
     Copyright         = 'Copyright (c) 2026 Ryan Terp'
