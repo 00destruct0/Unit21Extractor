@@ -21,7 +21,7 @@
 
 .NOTES
     Module:  Unit21Extractor
-    Version: 1.0.0
+    Version: 1.1.0
 #>
 
 # ---------------------------------------------------------------------------
@@ -532,15 +532,18 @@ function Export-U21Alert {
     .PARAMETER BaseUri
         Optional. Overrides the default API base URL.
 
-    .PARAMETER IsSummary
-        Optional. If $true (default), generates the summary report.
-        If $false, generates the detailed report.
+    .PARAMETER Summary
+        Optional switch. When specified, generates a summary report instead of the
+        default detailed report.
 
     .EXAMPLE
-        Export-U21Alert -ApiKey "your-key" -StartDate "2026-02-01" -OutputPath "C:\Exports\alerts.csv"
+        Export-U21Alert -ApiKey "your-key" -StartDate "2026-02-01" -OutputPath "C:\Exports\alerts.zip"
 
     .EXAMPLE
-        Export-U21Alert -ApiKey "your-key" -StartDate "2026-02-01" -EndDate "2026-02-13" -OutputPath "C:\Exports\alerts.csv" -IsSummary $false -Verbose
+        Export-U21Alert -ApiKey "your-key" -StartDate "2026-02-01" -EndDate "2026-02-13" -OutputPath "C:\Exports\alerts.zip" -Verbose
+
+    .EXAMPLE
+        Export-U21Alert -ApiKey "your-key" -StartDate "2026-02-01" -OutputPath "C:\Exports\alerts_summary.zip" -Summary
     #>
     [CmdletBinding()]
     param(
@@ -562,7 +565,7 @@ function Export-U21Alert {
         [string]$BaseUri,
 
         [Parameter()]
-        [bool]$IsSummary = $true
+        [switch]$Summary
     )
 
     if (-not $BaseUri) { $BaseUri = $script:Config.Api.BaseUrl }
@@ -579,12 +582,13 @@ function Export-U21Alert {
 
     # Build the export request body
     # Note: Alerts use start_date/end_date, NOT created_at_start/created_at_end
+    # Default is detailed report (is_summary=false). Use -Summary for summary report.
     $body = @{
         filters = @{
             start_date = $startDateStr
             end_date   = $endDateStr
         }
-        is_summary = $IsSummary
+        is_summary = [bool]$Summary
         use_csv    = $true
     }
 
