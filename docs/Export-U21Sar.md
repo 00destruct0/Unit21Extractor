@@ -10,20 +10,7 @@ Export-U21Sar -ApiKey <string> -StartDate <string> -OutputPath <string>
 ```
 
 ## DESCRIPTION
-Triggers a bulk export of SARs from Unit21, polls for completion, and downloads
-the resulting file. The full workflow is automated: initiate export, poll status,
-retrieve download URL, save file to disk.
-
-**Important:** Unit21 exports are delivered as ZIP files containing multiple CSV
-files. Based on testing, the SAR export contains:
-
-- `sarfiling_sar_contents.csv` - The SAR filing data (primary)
-- `sarfiling_sar_alerts.csv` - Alerts linked to the SARs
-- `sarfiling_sar_cases.csv` - Cases associated with the SARs
-- `sarfiling_sar_entities.csv` - Entities (people/businesses) involved
-- `sarfiling_sar_events.csv` - Transactions/events referenced
-
-The module saves the ZIP file as-is to the specified OutputPath.
+Triggers a bulk export of SARs from Unit21, monitors the export job until completion, and downloads the resulting ZIP file. The entire workflow is automated: initiating the export, polling for status, retrieving the download URL, and saving the file to disk.
 
 ## PARAMETERS
 

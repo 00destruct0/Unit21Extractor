@@ -10,20 +10,7 @@ Export-U21Case -ApiKey <string> -StartDate <string> -OutputPath <string>
 ```
 
 ## DESCRIPTION
-Triggers a bulk export of cases from Unit21, polls for completion, and downloads
-the resulting file. The full workflow is automated: initiate export, poll status,
-retrieve download URL, save file to disk.
-
-**Important:** Unit21 exports are delivered as ZIP files containing multiple CSV
-files. Based on testing, the case export contains:
-
-- `case_case_contents.csv` - The case data (primary)
-- `case_case_alerts.csv` - Alerts linked to the cases
-- `case_case_action_events.csv` - Action events associated with the cases
-- `case_case_entities.csv` - Entities (people/businesses) involved
-- `case_case_events.csv` - Transactions/events referenced
-
-The module saves the ZIP file as-is to the specified OutputPath.
+Triggers a bulk export of cases from Unit21, monitors the export job until completion, and downloads the resulting ZIP file. The entire workflow is automated: initiating the export, polling for status, retrieving the download URL, and saving the file to disk.
 
 ## PARAMETERS
 
