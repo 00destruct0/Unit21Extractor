@@ -20,14 +20,17 @@ This project is independently developed and is not affiliated with or endorsed b
 >
 > Most Windows systems include **Windows PowerShell 5.1** by default, as it ships preinstalled with the operating system. If you have not intentionally installed PowerShell 7, you are almost certainly running **PowerShell 5.1**.
 
+1. On the right side of the repository page, you will see a panel labeled Releases. Click the link that says `Releases` or `Latest`.
+2. On the Releases page, find the the newest version it normally appears at the top then click the version title (for example v1.2.0) to open the release details.
+3. Scroll down on the release page until you see a section labeled `Assets` and click the file that ends with .zip.
+5. Extract `Unit21Extractor.zip`.
+6. Copy the extracted `Unit21Extractor` folder to the appropriate module directory shown below.
 
-1. Extract `Unit21Extractor_1_1_0.zip`.
-2. Copy the extracted `Unit21Extractor` folder to the appropriate module directory shown below.
-
-| Version         | Scope         | Path                                            |
-|-----------------|--------------|--------------------------------------------------|
-| PowerShell 5.1  | Current User | `$HOME\Documents\WindowsPowerShell\Modules`      |
-| PowerShell 7    | Current User | `$HOME\Documents\PowerShell\Modules`             |
+| Version         | Scope         | Path                                                    |
+|-----------------|--------------|----------------------------------------------------------|
+| PowerShell 5.1  | Current User | `$HOME\Documents\WindowsPowerShell\Modules`              |
+| PowerShell 5.1  | All Users    | `%SystemDrive%\Program Files\WindowsPowerShell\Modules`  |
+| PowerShell 7    | Current User | `$HOME\Documents\PowerShell\Modules`                     |
 
 After copying the module, import it:
 
@@ -35,10 +38,15 @@ After copying the module, import it:
 Import-Module Unit21Extractor
 ```
 
-## What’s New in v1.1.0
+## What’s New in v1.2.0
 
-- **Export-U21Alert: Export Enhancements**  
-  `Export-U21Alert` now generates a **detailed report** (`is_summary=false`) by default, based on user feedback indicating this is the preferred format. A new `-Summary` switch has been added to generate a summary report when needed.
+- **HTTP 423 (Locked) retry support**
+
+  The module now automatically retries when Unit21 returns a 423 status, which occurs when objects are busy with another operation.
+
+- **Rate limit visibility**
+
+  `-Verbose` output now displays rate limit status on every API call.
 
 
 ## Usage

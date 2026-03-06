@@ -140,8 +140,8 @@ function Invoke-U21ApiRequest {
 
     .DESCRIPTION
         Internal helper that executes an HTTP request against the Unit21 API.
-        Retries on HTTP 429 (rate limit), 500, and 503 responses with exponential
-        backoff. Raises terminating errors for non-retryable failures.
+        Retries on HTTP 423 (locked/busy), 429 (rate limit), 500, and 503 responses
+        with exponential backoff. Raises terminating errors for non-retryable failures.
 
         All requests use UTF-8 encoding and the -UseBasicParsing switch for
         compatibility with PowerShell 5.1.
@@ -202,10 +202,33 @@ function Invoke-U21ApiRequest {
                 $requestParams['Body'] = $bodyBytes
             }
 
-            $response = Invoke-RestMethod @requestParams
+            $response = Invoke-WebRequest @requestParams
+
+            # Log rate limit headers for troubleshooting
+            $rlLimit     = $response.Headers['X-RateLimit-Limit']
+            $rlRemaining = $response.Headers['X-RateLimit-Remaining']
+            $rlReset     = $response.Headers['X-RateLimit-Reset']
+
+            if ($rlLimit -or $rlRemaining) {
+                # Handle header values that may be arrays (PS 7) or strings (PS 5.1)
+                if ($rlLimit     -is [array]) { $rlLimit     = $rlLimit[0] }
+                if ($rlRemaining -is [array]) { $rlRemaining = $rlRemaining[0] }
+                if ($rlReset     -is [array]) { $rlReset     = $rlReset[0] }
+
+                # Convert epoch reset timestamp to human-readable ISO format
+                $resetDisplay = $rlReset
+                if ($rlReset -match '^\d+$') {
+                    $resetDisplay = ([DateTimeOffset]::FromUnixTimeSeconds([long]$rlReset)).UtcDateTime.ToString('yyyy-MM-dd HH:mm:ss UTC')
+                }
+
+                Write-U21Log -Message "Rate limit: $rlRemaining remaining out of $rlLimit allowed (reset: $resetDisplay)"
+            }
 
             Write-U21Log -Message "API request successful: $Method $Uri"
-            return $response
+
+            # Parse JSON response body
+            $parsedResponse = $response.Content | ConvertFrom-Json
+            return $parsedResponse
         }
         catch {
             $statusCode  = $null
@@ -218,8 +241,8 @@ function Invoke-U21ApiRequest {
 
             Write-U21Log -Message "API request failed: HTTP $statusCode - $($_.Exception.Message)" -Level Warning
 
-            # Retryable status codes: 429 (rate limit), 500 (server error), 503 (maintenance)
-            $isRetryable = ($statusCode -eq 429) -or ($statusCode -eq 500) -or ($statusCode -eq 503)
+            # Retryable status codes: 423 (locked/busy), 429 (rate limit), 500 (server error), 503 (maintenance)
+            $isRetryable = ($statusCode -eq 423) -or ($statusCode -eq 429) -or ($statusCode -eq 500) -or ($statusCode -eq 503)
 
             if (-not $isRetryable) {
                 $errorMessage = "Unit21 API error: HTTP $statusCode on $Method $Uri - $($_.Exception.Message)"
